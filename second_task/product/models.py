@@ -4,6 +4,7 @@ from django.core.validators import MinValueValidator
 from versatileimagefield.fields import VersatileImageField
 
 from core.models import BaseModel
+from category.models import Category, Subcategory
 
 
 User = get_user_model()
@@ -18,6 +19,12 @@ class Product(BaseModel):
         verbose_name='Цена', validators=(
             MinValueValidator(1,
                               message='Цена должна'' быть больше или равно 1'), ))
+    category = models.ForeignKey(
+        Category, verbose_name='Категория', related_name='products',
+        on_delete=models.PROTECT)
+    subcategory = models.ForeignKey(
+        Subcategory, verbose_name='Подкатегория',
+        related_name='%(class)s_products', on_delete=models.PROTECT)
 
     class Meta:
         verbose_name = 'Товары'

@@ -24,7 +24,7 @@ class Subcategory(BaseModel):
                               verbose_name='Фото подкатегории')
     category = models.ForeignKey(
         Category, verbose_name='Категории', related_name='subcategory',
-        on_delete=models.CASCADE)
+        on_delete=models.PROTECT)
 
     class Meta:
         verbose_name = 'Подкатегория'
