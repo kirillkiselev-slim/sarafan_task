@@ -6,25 +6,31 @@ from versatileimagefield.fields import VersatileImageField
 from core.models import BaseModel
 from category.models import Category, Subcategory
 
-
 User = get_user_model()
 
 
 class Product(BaseModel):
     name = models.CharField(max_length=64, verbose_name='товар')
 
-    image = VersatileImageField(upload_to='products/',
-                                verbose_name='Фото категории')
-    price = models.PositiveIntegerField(
-        verbose_name='Цена', validators=(
-            MinValueValidator(1,
-                              message='Цена должна'' быть больше или равно 1'), ))
+    price = models.DecimalField(
+        verbose_name='Цена', decimal_places=2, validators=(
+            MinValueValidator(
+                1,
+                message='Цена должна'' быть больше или равно 1'),),
+        max_digits=6)
     category = models.ForeignKey(
         Category, verbose_name='Категория', related_name='products',
         on_delete=models.PROTECT)
     subcategory = models.ForeignKey(
         Subcategory, verbose_name='Подкатегория',
         related_name='%(class)s_products', on_delete=models.PROTECT)
+
+    thumbnail = VersatileImageField(upload_to='images/products/thumbnails/',
+                                    verbose_name='Миниатюра')
+    medium = VersatileImageField(upload_to='images/products/medium/',
+                                 verbose_name='Среднее изображение')
+    large = VersatileImageField(upload_to='images/products/large/',
+                                verbose_name='Большое изображение')
 
     class Meta:
         verbose_name = 'Товары'
@@ -45,6 +51,10 @@ class ShoppingCart(models.Model):
         Product, on_delete=models.CASCADE,
         related_name='shopping_cart',
         verbose_name='Подкатегория')
+    amount = models.PositiveIntegerField(verbose_name='Кол-Во', validators=(
+        MinValueValidator(
+            1,
+            message='Кол-во должна'' быть больше или равно 1'),))
 
     class Meta:
         ordering = ('user',)

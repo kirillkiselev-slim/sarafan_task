@@ -7,6 +7,8 @@ from django.core.exceptions import ValidationError
 
 from product.models import Product, ShoppingCart
 from category.models import Category, Subcategory
+from rest_framework.validators import UniqueTogetherValidator
+
 from .constants import ALREADY_IN_SHOPPING_CART, NOT_IN_SHOPPING_CART
 
 
@@ -33,6 +35,8 @@ class ProductSerializer(serializers.ModelSerializer):
     thumbnail = Base64ImageField(required=True, allow_null=False)
     large = Base64ImageField(required=True, allow_null=False)
     medium = Base64ImageField(required=True, allow_null=False)
+    category = serializers.StringRelatedField(read_only=True)
+    subcategory = serializers.StringRelatedField(read_only=True)
 
     class Meta(SarafanBaseSerializer.Meta):
         model = Product
@@ -50,7 +54,6 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(SarafanBaseSerializer):
-
     class Meta(SarafanBaseSerializer.Meta):
         model = Category
 
@@ -61,21 +64,26 @@ class CategorySerializer(SarafanBaseSerializer):
 
 
 class SubcategorySerializer(SarafanBaseSerializer):
+    category = serializers.StringRelatedField(read_only=True)
 
     class Meta(SarafanBaseSerializer.Meta):
         model = Subcategory
 
 
-# class ShoppingCartSerializer(SarafanBaseSerializer):
-#
-#     class Meta(SarafanBaseSerializer.Meta):
-#         model = Subcategory
-
-
 class ShoppingCartSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        read_only=True, default=serializers.CurrentUserDefault())
+
     class Meta:
         model = ShoppingCart
         fields = '__all__'
+        read_only_fields = ('product', 'is_in_shopping_cart')
+        validators = [
+            UniqueTogetherValidator(
+                queryset=ShoppingCart.objects.all(),
+                fields=('user', 'product')
+            )
+        ]
 
     def get_request(self):
         return self.context.get('request')
@@ -94,7 +102,7 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
         query = ShoppingCart.objects.filter(
             product=product, user=user,
             is_in_shopping_cart=True).exists()
-        if request.method == 'POST':
+        if request.method in 'POST':
             if query:
                 raise ValidationError(ALREADY_IN_SHOPPING_CART)
 
@@ -102,3 +110,20 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
             if not query:
                 raise ValidationError(NOT_IN_SHOPPING_CART)
         return shopping_cart_data
+
+    def update_or_create_shopping_cart(self, user, product, amount):
+        cart, _ = ShoppingCart.objects.update_or_create(
+            product=product, user=user,
+            defaults={'is_in_shopping_cart': True},
+            amount=amount)
+        return cart
+
+    def create(self, validated_data):
+        self.update_or_create_shopping_cart(
+            product=self.get_product(), user=self.get_user(),
+            amount=validated_data.get('amount'))
+
+    def update(self, instance, validated_data):
+        self.update_or_create_shopping_cart(
+            product=self.get_product(), user=self.get_user(),
+            amount=validated_data.get('amount'))
