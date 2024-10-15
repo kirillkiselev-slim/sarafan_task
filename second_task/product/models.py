@@ -50,7 +50,7 @@ class ShoppingCart(models.Model):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE,
         related_name='shopping_cart',
-        verbose_name='Подкатегория')
+        verbose_name='Продукт')
     amount = models.PositiveIntegerField(verbose_name='Кол-Во', validators=(
         MinValueValidator(
             1,
