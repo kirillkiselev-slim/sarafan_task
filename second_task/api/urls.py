@@ -16,7 +16,7 @@ router.register(r'products', ProductViewSet, basename='products')
 router.register(r'categories', CategoryViewSet, basename='categories')
 router.register(r'subcategories', SubcategoryViewSet,
                 basename='subcategories')
-router.register(r'shopping-cart', ShoppingCartViewSet,
+router.register(r'my-shopping-cart', ShoppingCartViewSet,
                 basename='shopping-cart')
 
 

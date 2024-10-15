@@ -70,14 +70,26 @@ class SubcategorySerializer(SarafanBaseSerializer):
         model = Subcategory
 
 
-class ShoppingCartSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(
-        read_only=True, default=serializers.CurrentUserDefault())
+class BaseShoppingCartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ShoppingCart
+
+    def get_request(self):
+        return self.context.get('request')
+
+    def get_user(self):
+        request = self.get_request()
+        return request.user
+
+
+class ShoppingCartPostPutDeleteSerializer(BaseShoppingCartSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        read_only=True, default=serializers.CurrentUserDefault())
+
+    class Meta(BaseShoppingCartSerializer.Meta):
         fields = '__all__'
-        read_only_fields = ('product', 'is_in_shopping_cart')
+        read_only_fields = ('is_in_shopping_cart',)
         validators = [
             UniqueTogetherValidator(
                 queryset=ShoppingCart.objects.all(),
@@ -85,19 +97,13 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
             )
         ]
 
-    def get_request(self):
-        return self.context.get('request')
-
-    def get_user(self):
-        return self.get_request().user
-
     def get_product(self):
-        pk = self.get_request().parser_context.get('kwargs').get('pk')
-        return get_object_or_404(Product, pk=pk)
+        product = self.get_request().parser_context.get('kwargs').get('pk')
+        return get_object_or_404(Product, pk=product)
 
     def validate(self, shopping_cart_data):
-        product = self.get_product()
         request = self.get_request()
+        product = self.get_product()
         user = self.get_user()
         query = ShoppingCart.objects.filter(
             product=product, user=user,
@@ -114,7 +120,7 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
     def update_or_create_shopping_cart(self, user, product, amount):
         cart, _ = ShoppingCart.objects.update_or_create(
             product=product, user=user,
-            defaults={'is_in_shopping_cart': True},
+            defaults={'is_in_shopping_cart': True, 'amount': amount},
             amount=amount)
         return cart
 
@@ -127,3 +133,9 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
         self.update_or_create_shopping_cart(
             product=self.get_product(), user=self.get_user(),
             amount=validated_data.get('amount'))
+
+
+class ShoppingCartGetSerializer(BaseShoppingCartSerializer):
+
+    class Meta(BaseShoppingCartSerializer.Meta):
+        fields = '__all__'
