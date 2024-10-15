@@ -17,7 +17,7 @@ class Product(BaseModel):
             MinValueValidator(
                 1,
                 message='Цена должна'' быть больше или равно 1'),),
-        max_digits=6)
+        max_digits=10,)
     category = models.ForeignKey(
         Category, verbose_name='Категория', related_name='products',
         on_delete=models.PROTECT)
