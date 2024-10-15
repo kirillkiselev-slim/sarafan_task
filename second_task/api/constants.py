@@ -5,4 +5,4 @@ ALREADY_IN_SHOPPING_CART = {
 NOT_IN_SHOPPING_CART = {
     'errors': 'Этого товара нет в корзине.'
 }
-
+SUCCESS_MESSAGE = {'success': 'Удалены товар/товары'}

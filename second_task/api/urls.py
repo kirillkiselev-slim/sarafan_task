@@ -4,8 +4,8 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from .views import (ProductViewSet, CategoryViewSet,
-                    SubcategoryViewSet, ShoppingCartViewSet)
+from .views import (ProductViewSet, CategoryViewSet, ShoppingCartGeneric,
+                    SubcategoryViewSet, ShoppingCartViewSet, ClearShoppingCart)
 
 
 app_name = 'api'
@@ -17,13 +17,17 @@ router.register(r'categories', CategoryViewSet, basename='categories')
 router.register(r'subcategories', SubcategoryViewSet,
                 basename='subcategories')
 router.register(r'my-shopping-cart', ShoppingCartViewSet,
-                basename='shopping-cart')
+                basename='shopping-cart-info')
 
 
 urlpatterns = [
     path('', include(router.urls)),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
+    path('shopping-cart/<int:product_pk>', ShoppingCartGeneric.as_view(),
+         name='shopping-cart'),
+    path('shopping-cart/clear/', ClearShoppingCart.as_view(),
+         name='clear-shopping-cart'),
 ]
 
 schema_view = get_schema_view(

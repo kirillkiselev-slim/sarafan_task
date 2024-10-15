@@ -71,7 +71,6 @@ class SubcategorySerializer(SarafanBaseSerializer):
 
 
 class BaseShoppingCartSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = ShoppingCart
 
@@ -88,22 +87,18 @@ class ShoppingCartPostPutDeleteSerializer(BaseShoppingCartSerializer):
         read_only=True, default=serializers.CurrentUserDefault())
 
     class Meta(BaseShoppingCartSerializer.Meta):
-        fields = '__all__'
-        read_only_fields = ('is_in_shopping_cart',)
-        validators = [
-            UniqueTogetherValidator(
-                queryset=ShoppingCart.objects.all(),
-                fields=('user', 'product')
-            )
-        ]
+        fields = ('amount', 'user')
+        read_only_fields = ('is_in_shopping_cart', 'product')
 
     def get_product(self):
-        product = self.get_request().parser_context.get('kwargs').get('pk')
+        product = self.get_request().parser_context.get(
+            'kwargs').get('product_pk')
         return get_object_or_404(Product, pk=product)
 
     def validate(self, shopping_cart_data):
         request = self.get_request()
         product = self.get_product()
+        shopping_cart_data['product'] = product
         user = self.get_user()
         query = ShoppingCart.objects.filter(
             product=product, user=user,
@@ -112,7 +107,7 @@ class ShoppingCartPostPutDeleteSerializer(BaseShoppingCartSerializer):
             if query:
                 raise ValidationError(ALREADY_IN_SHOPPING_CART)
 
-        if request.method == 'DELETE':
+        elif request.method == 'PUT':
             if not query:
                 raise ValidationError(NOT_IN_SHOPPING_CART)
         return shopping_cart_data
@@ -120,22 +115,24 @@ class ShoppingCartPostPutDeleteSerializer(BaseShoppingCartSerializer):
     def update_or_create_shopping_cart(self, user, product, amount):
         cart, _ = ShoppingCart.objects.update_or_create(
             product=product, user=user,
-            defaults={'is_in_shopping_cart': True, 'amount': amount},
-            amount=amount)
+            defaults={'is_in_shopping_cart': True, 'amount': amount})
         return cart
 
     def create(self, validated_data):
-        self.update_or_create_shopping_cart(
+        cart = self.update_or_create_shopping_cart(
             product=self.get_product(), user=self.get_user(),
             amount=validated_data.get('amount'))
+        return cart
 
     def update(self, instance, validated_data):
-        self.update_or_create_shopping_cart(
+        cart = self.update_or_create_shopping_cart(
             product=self.get_product(), user=self.get_user(),
             amount=validated_data.get('amount'))
+        return cart
 
-
-class ShoppingCartGetSerializer(BaseShoppingCartSerializer):
-
-    class Meta(BaseShoppingCartSerializer.Meta):
-        fields = '__all__'
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['id'] = instance.id
+        data['user'] = instance.user.username
+        data['product'] = instance.product.name
+        return data

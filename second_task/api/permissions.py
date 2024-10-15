@@ -7,9 +7,9 @@ class ReadOrAdminOnly(AllowAny):
         return request.method in SAFE_METHODS or request.user.is_staff
 
 
-class AuthorOrAdminOnly(IsAuthenticated):
+class AuthorOnly(IsAuthenticated):
 
     def has_object_permission(self, request, view, user_data):
-        return user_data.username == request.user or request.user.is_staff
+        return user_data.user == request.user
 
 
