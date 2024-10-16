@@ -1,0 +1,220 @@
+[
+    {
+        "model": "category.category",
+        "pk": 1,
+        "fields": {
+            "title": "Электроника",
+            "image": "categories/electronics.jpg",
+            "slug": "electronics",
+            "created_at": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "category.category",
+        "pk": 2,
+        "fields": {
+            "title": "Одежда",
+            "image": "categories/clothing.jpg",
+            "slug": "clothing",
+            "created_at": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "category.category",
+        "pk": 3,
+        "fields": {
+            "title": "Спорт",
+            "image": "categories/sports.jpg",
+            "slug": "sports",
+            "created_at": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "category.subcategory",
+        "pk": 1,
+        "fields": {
+            "title": "Смартфоны",
+            "image": "subcategories/smartphones.jpg",
+            "category": 1,
+            "slug": "smartphones",
+            "created_at": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "category.subcategory",
+        "pk": 2,
+        "fields": {
+            "title": "Ноутбуки",
+            "image": "subcategories/laptops.jpg",
+            "category": 1,
+            "slug": "laptops",
+            "created_at": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "category.subcategory",
+        "pk": 3,
+        "fields": {
+            "title": "Мужская одежда",
+            "image": "subcategories/mens_clothing.jpg",
+            "category": 2,
+            "slug": "mens-clothing",
+            "created_at": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "category.subcategory",
+        "pk": 4,
+        "fields": {
+            "title": "Женская одежда",
+            "image": "subcategories/womens_clothing.jpg",
+            "category": 2,
+            "slug": "womens-clothing",
+            "created_at": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "category.subcategory",
+        "pk": 5,
+        "fields": {
+            "title": "Спортивный инвентарь",
+            "image": "subcategories/sports_equipment.jpg",
+            "category": 3,
+            "slug": "sports-equipment",
+            "created_at": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "product.product",
+        "pk": 1,
+        "fields": {
+            "name": "iPhone 13",
+            "price": "799.99",
+            "category": 1,
+            "subcategory": 1,
+            "thumbnail": "images/products/thumbnails/iphone13_thumbnail.jpg",
+            "medium": "images/products/medium/iphone13_medium.jpg",
+            "large": "images/products/large/iphone13_large.jpg",
+            "slug": "iphone-13",
+            "created_at": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "product.product",
+        "pk": 2,
+        "fields": {
+            "name": "MacBook Pro",
+            "price": "1999.99",
+            "category": 1,
+            "subcategory": 2,
+            "thumbnail": "images/products/thumbnails/macbook_pro_thumbnail.jpg",
+            "medium": "images/products/medium/macbook_pro_medium.jpg",
+            "large": "images/products/large/macbook_pro_large.jpg",
+            "slug": "macbook-pro",
+            "created_at": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "product.product",
+        "pk": 3,
+        "fields": {
+            "name": "Мужская футболка",
+            "price": "29.99",
+            "category": 2,
+            "subcategory": 3,
+            "thumbnail": "images/products/thumbnails/mens_shirt_thumbnail.jpg",
+            "medium": "images/products/medium/mens_shirt_medium.jpg",
+            "large": "images/products/large/mens_shirt_large.jpg",
+            "slug": "mens-shirt",
+            "created_at": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "product.product",
+        "pk": 4,
+        "fields": {
+            "name": "Женская куртка",
+            "price": "149.99",
+            "category": 2,
+            "subcategory": 4,
+            "thumbnail": "images/products/thumbnails/womens_jacket_thumbnail.jpg",
+            "medium": "images/products/medium/womens_jacket_medium.jpg",
+            "large": "images/products/large/womens_jacket_large.jpg",
+            "slug": "womens-jacket",
+            "created_at": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "product.product",
+        "pk": 5,
+        "fields": {
+            "name": "Теннисная ракетка",
+            "price": "89.99",
+            "category": 3,
+            "subcategory": 5,
+            "thumbnail": "images/products/thumbnails/tennis_racket_thumbnail.jpg",
+            "medium": "images/products/medium/tennis_racket_medium.jpg",
+            "large": "images/products/large/tennis_racket_large.jpg",
+            "slug": "tennis-racket",
+            "created_at": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "username": "testuser",
+            "email": "testuser@example.com",
+            "password": "pbkdf2_sha256$216000$kQf9bMLuFJ$OYxzZsTxEvMcdh8en8xFZfbZHrDh1kp5F5/KaCb5DDY="
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "username": "adminuser",
+            "email": "admin@example.com",
+            "password": "pbkdf2_sha256$216000$Abc9jMLmLK$YnTzcZYxRqEhzlJ5PnFNzOERnCxei3TfJc/Ej4Bc5EE="
+        }
+    },
+    {
+        "model": "product.shoppingcart",
+        "pk": 1,
+        "fields": {
+            "is_in_shopping_cart": true,
+            "user": 1,
+            "product": 1,
+            "amount": 1
+        }
+    },
+    {
+        "model": "product.shoppingcart",
+        "pk": 2,
+        "fields": {
+            "is_in_shopping_cart": true,
+            "user": 1,
+            "product": 2,
+            "amount": 1
+        }
+    },
+    {
+        "model": "product.shoppingcart",
+        "pk": 3,
+        "fields": {
+            "is_in_shopping_cart": true,
+            "user": 2,
+            "product": 3,
+            "amount": 2
+        }
+    },
+    {
+        "model": "product.shoppingcart",
+        "pk": 4,
+        "fields": {
+            "is_in_shopping_cart": true,
+            "user": 2,
+            "product": 5,
+            "amount": 3
+        }
+    }
+]
