@@ -44,6 +44,23 @@ python3 -m venv env
 ```bash
 python3 -m pip install --upgrade pip
 ```
+Создать свой .env файл и положите туда ваш DJANGO_KEY. Используйте этот [генератор](https://djecrety.ir/), например:
+
+Для Linux/Mac
+```bash
+touch second_task/.env
+```
+
+Для Windows
+```commandline
+cd google_creation_warmup && type nul > .env
+```
+Перейдите в .env файл и положите туда ключ, пример ниже.
+
+```text
+DJANGO_KEY=<your-random-key>
+```
+
 
 Установить зависимости из файла requirements.txt:
 
