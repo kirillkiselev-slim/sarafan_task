@@ -53,7 +53,7 @@ touch second_task/.env
 
 Для Windows
 ```commandline
-cd google_creation_warmup && type nul > .env
+type nul > .\second_task\.env
 ```
 Перейдите в .env файл и положите туда ключ, пример ниже.
 
