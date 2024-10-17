@@ -61,7 +61,6 @@ type nul > .\second_task\.env
 DJANGO_KEY=<your-random-key>
 ```
 
-
 Установить зависимости из файла requirements.txt:
 
 ```bash
