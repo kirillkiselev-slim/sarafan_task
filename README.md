@@ -73,6 +73,10 @@ pip install -r requirements.txt
 ```bash
 python manage.py migrate && python manage.py makemigrations
 ```
+Еще раз сделайте миграции
+```bash
+python manage.py migrate
+```
 
 ## Загрузите фикстуры
 
